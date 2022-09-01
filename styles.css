@@ -1,0 +1,75 @@
+* {
+    box-sizing: border-box;
+    margin: 0%;
+    padding: 0%;
+    list-style: none;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+html {
+    font-size: 10px;
+}
+
+.container {
+    width: 500px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+form {
+    margin: 20px auto;
+    width: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+input {
+    padding: 5px 0px 5px 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+input:focus {
+    outline: black solid 1px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.bt_save {
+    font-size: 1.5rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.bt_save:hover {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    
+}
+
+table {
+    width: 500px;
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+#id_contact {
+    display: none;
+}

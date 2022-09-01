@@ -1,0 +1,18 @@
+{
+  "name": "js-challenge-copy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --verbose"
+  },
+  "keywords": [
+    "jest",
+    "testing"
+  ],
+  "author": "Luis Baute",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.1"
+  }
+}
