@@ -1,22 +1,16 @@
 {
   "contacts": [
     {
-      "name": "hola",
-      "lastname": "luis",
-      "number": 3444,
+      "name": "32343rrer",
+      "lastname": "3232",
+      "number": 323232,
       "id": 1
     },
     {
-      "name": "r",
-      "lastname": "rwr",
-      "number": 443,
+      "name": "323332",
+      "lastname": "2333232",
+      "number": 3332,
       "id": 2
-    },
-    {
-      "name": "hola",
-      "lastname": "4343",
-      "number": 443,
-      "id": 3
     }
   ]
 }

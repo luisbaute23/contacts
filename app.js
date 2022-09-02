@@ -1,10 +1,76 @@
-const url = "http://localhost:3000/contacts";
+const url = 'http://localhost:3000/contacts';
 
-const get_contacts = async () => {
+const get_data = async (url) => {
     const response = await fetch(url);
-    const contacts = await response.json(); 
+    const data = await response.json();
 
-    const template = contacts => `
+    return data; // retorno la promesa, esta la tomara el render
+};
+
+const post_data = (url) => {
+    const form = document.getElementById('form');
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        data.number = parseInt(data.number);
+        try {
+            if (document.querySelector('#id_contact').value == 0) {
+                await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers:{'Content-Type': 'application/json'}
+                });
+            } else {
+                await put_data(url, data);   
+            }
+            form.reset();
+            render_data();
+        } catch (error) {
+            console.log(error);
+        }   
+    };
+};
+
+const put_data = async (url, data) => {
+    const url_concat = url + '/' + parseInt(data.id);
+
+    await fetch(url_concat, {
+        method:'PUT',
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+};
+
+const delete_data = async (data) => {
+    data.forEach(contact => {
+        const data_node = document.querySelector(`[data-dlt-id="${contact.id}"]`);
+        const url_concat = url + '/' + parseInt(contact.id);
+
+        data_node.onclick = async () => {
+            await fetch(url_concat, {
+                method: 'DELETE',
+            });
+            let remove_tr = document.querySelector('#remove_tr');
+            remove_tr.remove();
+        };
+        const edit_data = document.querySelector(`[data-edit-id="${contact.id}"]`);
+
+        edit_data.onclick = async () => {
+            document.querySelector('#name').value = contact.name;
+            document.querySelector('#lastname').value = contact.lastname;
+            document.querySelector('#number').value = contact.number;
+            document.querySelector('#id_contact').value = contact.id;
+        };        
+    });
+};
+
+const render_data =  async () => {
+    const data = await get_data(url); //tomo los datos del fectch
+
+    const template = (contacts) => `
         <tr id="remove_tr">
             <td> ${contacts.name} </td>
             <td> ${contacts.lastname}</td>
@@ -18,70 +84,15 @@ const get_contacts = async () => {
                 </button>
             </td>
         </tr>
-    `
+    `;
     const contact_table = document.querySelector('#tbody');
-    contact_table.innerHTML = contacts.map(contact => template(contact)).join('');
-	
-    contacts.forEach(contact =>{
-        const contact_node = document.querySelector(`[data-dlt-id="${contact.id}"]`);
-        const url_concat = url + "/" + parseInt(contact.id);
 
-        contact_node.onclick = async e => {
-            await fetch(url_concat, {
-                method: 'DELETE',
-            })
-            let remove_tr = document.querySelector('#remove_tr');
-            remove_tr.remove();
-        }
-		
-		const edit_contact = document.querySelector(`[data-edit-id="${contact.id}"]`);
+    contact_table.innerHTML = data.map(contact => template(contact)).join('');
+    delete_data(data);
+};
 
-		edit_contact.onclick = async e => {
-			document.querySelector('#name').value = contact.name;
-			document.querySelector('#lastname').value = contact.lastname;
-			document.querySelector('#number').value = contact.number;
-			document.querySelector('#id_contact').value = contact.id;
-		}
-    })
-}
-
-const create_contact = () => {
-    const form = document.getElementById('form');
-    form.onsubmit = async (e) => {
-        e.preventDefault(); 
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        // convertir number a numero (al crear el objeto lo guarda como string)
-        data.number = parseInt(data.number); 
-		
-		const url_concat = url + "/" + parseInt(data.id);
-		// console.log(url_concat);
-
-        try {
-
-			if (document.querySelector('#id_contact').value == 0){
-				await fetch(url, {
-					method: 'POST',
-					body: JSON.stringify(data),
-					headers:{'Content-Type': 'application/json'}
-				});
-			} else {
-				await fetch(url_concat, {
-					method:'PUT',
-					body: JSON.stringify(data),
-					headers: {'Content-Type': 'application/json'}
-				})
-			}
-            form.reset();
-            get_contacts();
-            
-        } catch (error) {
-            
-        }        
-    }
-}
-
-window.onload = () => {
-    create_contact();
-    get_contacts();
-}
+window.onload = ()=> {
+    //get_data();
+    render_data();
+    post_data(url);
+};
