@@ -1,13 +1,14 @@
-const url = 'http://localhost:3000/contacts';
+export const url = 'http://localhost:3000/contacts';
 
-const get_data = async (url) => {
+export async function get_data (url) {
+    if (typeof url != 'string')
+        throw Error('url not found');
     const response = await fetch(url);
     const data = await response.json();
 
     return data; // retorno la promesa, esta la tomara el render
 };
-
-const post_data = (url) => {
+export const post_data = (url) => {
     const form = document.getElementById('form');
 
     form.onsubmit = async (e) => {
@@ -34,7 +35,9 @@ const post_data = (url) => {
     };
 };
 
-const put_data = async (url, data) => {
+export const put_data = async (url, data) => {
+    if (typeof data != 'object' || typeof url != 'string')
+        throw Error('not is a object');
     const url_concat = url + '/' + parseInt(data.id);
 
     await fetch(url_concat, {
@@ -63,11 +66,11 @@ const delete_data = async (data) => {
             document.querySelector('#lastname').value = contact.lastname;
             document.querySelector('#number').value = contact.number;
             document.querySelector('#id_contact').value = contact.id;
-        };        
+        };
     });
 };
 
-const render_data =  async () => {
+export async function render_data() {
     const data = await get_data(url); //tomo los datos del fectch
 
     const template = (contacts) => `
@@ -91,8 +94,3 @@ const render_data =  async () => {
     delete_data(data);
 };
 
-window.onload = ()=> {
-    //get_data();
-    render_data();
-    post_data(url);
-};
